@@ -68,6 +68,7 @@ from .button import (
     EnableCommandButtonEntity,
 )
 
+LOGGER.warning("MyHOME fork Interstellar0verdrive - build 2026-02-20-01")
 
 class MyHOMEGatewayHandler:
     """Manages a single MyHOME Gateway."""
