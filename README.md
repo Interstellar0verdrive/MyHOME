@@ -1,3 +1,19 @@
+---
+
+## ⚠️ Work in Progress – Personal Fork
+
+This repository is a fork of  
+**anotherjulien/MyHOME**.
+
+I am experimenting with stability improvements (listener reconnect logic and clean task shutdown).
+
+It is not stable, not reviewed, and not intended for production use.
+
+Original project:
+https://github.com/anotherjulien/MyHOME
+
+---
+
 # What's up?
 
 I'm afraid it's time to be blunt, I cannot maintain this integration any longer, not in any meaningful way at least.
