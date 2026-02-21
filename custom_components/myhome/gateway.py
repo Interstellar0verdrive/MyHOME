@@ -141,6 +141,10 @@ class MyHOMEGatewayHandler:
         max_backoff = 60
         _event_session = None
 
+        last_event_monotonic = asyncio.get_running_loop().time()
+        last_watchdog_monotonic = last_event_monotonic
+        watchdog_interval = 300  # seconds (5 min)       
+
         while not self._terminate_listener:
             try:
                 if _event_session is None:
@@ -154,11 +158,22 @@ class MyHOMEGatewayHandler:
                 # We wake up periodically to check termination flags and to allow reconnect logic.
                 try:
                     message = await asyncio.wait_for(_event_session.get_next(), timeout=30)
+
                 except asyncio.TimeoutError:
+                    now = asyncio.get_running_loop().time()
+
+                    # Periodic watchdog: prove the loop is still running even if no events arrive.
+                    if now - last_watchdog_monotonic >= watchdog_interval:
+                        silence = int(now - last_event_monotonic)
+                        LOGGER.info("%s Listener alive. No events for %ss.", self.log_id, silence)
+                        last_watchdog_monotonic = now
+
                     LOGGER.debug("%s Listening loop timeout waiting for events (30s).", self.log_id)
                     continue
 
                 LOGGER.debug("%s Message received: `%s`", self.log_id, message)
+
+                last_event_monotonic = asyncio.get_running_loop().time()
 
                 if self.generate_events:
                     if isinstance(message, OWNMessage):
@@ -374,9 +389,6 @@ class MyHOMEGatewayHandler:
                         message,
                     )
 
-            except asyncio.TimeoutError:
-                # No messages in the last 30s. That's fine; it prevents a forever-hang.
-                continue
             except asyncio.CancelledError:
                 break
             except Exception as err:
