@@ -1,14 +1,42 @@
-## ⚠️ Work in Progress – Personal Fork
+## ⚠️ Personal Fork – Experimental Stability Improvements
 
-This repository is a fork of  
-**anotherjulien/MyHOME**.
+This repository is a personal fork of:
+**anotherjulien/MyHOME**
 
-I am experimenting with stability improvements (listener reconnect logic and clean task shutdown).
+The goal of this fork is to improve runtime stability and reduce gateway-side stress caused by aggressive polling and fragile reconnect handling.
 
-It is not stable, not reviewed, and not intended for production use.
+This is an experimental branch intended for testing and learning purposes.
+It is **not officially supported**, not reviewed, and not recommended for production environments.
 
-Original project:
+---
+
+### 🔧 Stability & Behavior Changes
+
+**2026-02 – Initial Stability Pass**
+
+- Added watchdog logic to the event listener loop to prevent infinite awaits on half-open sockets.
+- Improved reconnect handling with exponential backoff.
+- Added clean shutdown handling for async tasks.
+- Clarified internal task lifecycle (event session vs command session).
+- Reduced aggressive polling intervals:
+  - `sensor.py` SCAN_INTERVAL from 60s → 300s
+  - `binary_sensor.py` SCAN_INTERVAL from 5s → 30s
+- Added inline documentation to clarify async flow and session management.
+
+These changes aim to:
+- Reduce frequent TCP reconnect churn.
+- Minimize command session resets.
+- Improve long-running stability of the integration.
+
+---
+
+### 📌 Original Project
+
+Original upstream repository:
 https://github.com/anotherjulien/MyHOME
+
+All credits for the original implementation go to the upstream author.
+This fork only focuses on experimental stability improvements.
 
 # What's up?
 
