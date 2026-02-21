@@ -1,5 +1,5 @@
 {
-  "name": "MyHome",
+  "name": "hMyHOME-stability-mod",
   "zip_release": false,
   "country": ["GB", "FR", "NL", "IT"],
   "homeassistant": "2024.3.0"
